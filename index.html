@@ -179,7 +179,7 @@ footer b{color:var(--cream)}
   <div class="kpis">
     <div class="kpi"><small>Tickets sold</small><strong id="k-total">0</strong></div>
     <div class="kpi"><small>Active sellers</small><strong id="k-active">0</strong></div>
-    <div class="kpi"><small>Week</small><strong id="k-week">1</strong></div>
+    <div class="kpi"><small id="k-day-l">Campaign day</small><strong id="k-week">1</strong></div>
     <div class="kpi"><small id="k-days-l">Days left</small><strong id="k-days">0</strong></div>
   </div>
 
@@ -253,7 +253,11 @@ function render(d){DATA=d;
   const days=Math.max(0,Math.ceil((end-now)/864e5));
   countUp(document.getElementById("k-total"),d.total_tickets);
   countUp(document.getElementById("k-active"),d.active_sellers);
-  document.getElementById("k-week").textContent=d.current_week;
+  {const st=new Date(d.campaign_start+"T00:00:00"),en=new Date(d.campaign_end+"T00:00:00"),td=new Date(now);td.setHours(0,0,0,0);
+   const total=Math.round((en-st)/864e5)+1,day=Math.round((td-st)/864e5)+1;
+   const el=document.getElementById("k-week");
+   if(day<1){el.textContent="Launch";document.getElementById("k-day-l").textContent="Day 1 is tomorrow";}
+   else{el.innerHTML=Math.min(day,total)+'<span style="font-size:14px;color:var(--muted);font-weight:500"> / '+total+'</span>';document.getElementById("k-day-l").textContent="Day";}}
   countUp(document.getElementById("k-days"),days);
   document.getElementById("g-now").textContent=fmt(d.total_tickets);
   document.getElementById("g-goal").textContent=fmt(d.goal);
