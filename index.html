@@ -129,6 +129,30 @@ canvas#confetti{position:absolute;inset:0;pointer-events:none}
 .rule b{display:block;color:var(--ink);font-size:14px;margin-bottom:6px}
 .rule table{width:100%;border-collapse:collapse}
 .rule td{padding:3px 0}.rule td:last-child{text-align:right;color:var(--ink);font-weight:600}
+.tap{cursor:pointer}.tap:active{transform:scale(.985)}
+.row .chev{color:var(--muted);font-size:12px;margin-left:6px}
+.sheet-bg{position:fixed;inset:0;background:rgba(10,0,4,.7);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:50%;bottom:0;width:min(560px,100%);max-height:86vh;overflow:auto;transform:translate(-50%,105%);
+  background:var(--bg2);border:1px solid var(--line);border-bottom:none;border-radius:22px 22px 0 0;padding:22px 18px 28px;
+  transition:transform .35s cubic-bezier(.2,.9,.25,1);z-index:21}
+.sheet.open{transform:translate(-50%,0)}
+.sheet .x{position:absolute;right:14px;top:12px;background:var(--card);border:1px solid var(--line);color:var(--ink);width:34px;height:34px;border-radius:50%;font-size:16px;cursor:pointer}
+.sheet h3{font-size:24px;letter-spacing:-.5px}
+.sheet .sm{color:var(--muted);font-size:13px;margin-top:2px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}
+.sgrid div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px}
+.sgrid small{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.sgrid b{font-size:22px}
+.sh{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--cream);opacity:.8;margin:16px 0 8px}
+.brk{width:100%;border-collapse:collapse;font-size:14px}.brk td{padding:6px 0;border-bottom:1px solid var(--line)}
+.brk td:last-child{text-align:right;font-weight:600}.brk tr:last-child td{border:none;color:var(--red)}
+.weeks{display:flex;gap:6px;align-items:flex-end;height:90px}
+.weeks div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;font-size:11px;color:var(--muted)}
+.weeks i{display:block;width:100%;max-width:36px;background:var(--red);border-radius:6px 6px 2px 2px;min-height:3px;margin:3px 0}
+.weeks i.hit{background:var(--green)}
+.mem{display:flex;justify-content:space-between;padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:6px;font-size:14px}
+.mem span{color:var(--muted)}
 footer{margin-top:44px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
 footer b{color:var(--cream)}
 @media (max-width:640px){
@@ -160,7 +184,7 @@ footer b{color:var(--cream)}
   </div>
 
   <div class="goal">
-    <div class="goal-top"><span>Campaign goal</span><span><b id="g-now">0</b> / <span id="g-goal">1,000</span> tickets</span></div>
+    <div class="goal-top"><span id="g-label">Milestone 1</span><span><b id="g-now">0</b> / <span id="g-goal">1,000</span> tickets</span></div>
     <div class="bar"><div id="g-bar"></div></div>
   </div>
 
@@ -175,13 +199,13 @@ footer b{color:var(--cream)}
     <div class="count" id="countdown"></div>
   </div>
 
-  <h2>Leaderboard</h2>
+  <h2>Leaderboard <span style="text-transform:none;letter-spacing:0;color:var(--muted);font-weight:400">· tap a name for details</span></h2>
   <div class="list" id="list"></div>
   <div class="warm" id="warm"><p>🔥 Warming up: your first points put you on the board.</p><div class="chips" id="chips"></div></div>
 
   <h2>Campus Cup</h2>
   <div class="cup" id="cup"></div>
-  <p style="font-size:12px;color:var(--muted);margin-top:8px">Ranked by average points per ambassador, so every campus competes fairly.</p>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Ranked by average points per ambassador, so every campus competes fairly. Tap a campus to see who's scoring.</p>
 
   <h2>How to climb</h2>
   <div class="rules">
@@ -204,10 +228,12 @@ footer b{color:var(--cream)}
       💰 Commission on every ticket you sell<br>🏆 ₦5,000 for each Weekly Champion<br>🎁 Campaign Champion: free pass for a friend + recognition on the day<br>📜 Certificate for ambassadors who hit their targets</div>
   </div>
 
-  <footer>Weekly target: <b>5 tickets</b> · Weeks run Monday to Sunday · Campaign ends Sunday, 22 November<br>
+  <footer>Weekly target: <b>10 tickets</b> · Weeks run Monday to Sunday · Campaign ends Sunday, 22 November<br>
     Only verified, paid tickets count. Questions? Ask in the ambassador WhatsApp group.<br>© 2026 Lagos Students Career Expo</footer>
 </div>
 
+<div class="sheet-bg" id="sheetBg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"><button class="x" id="sheetX" aria-label="Close">✕</button><div id="sheetBody"></div></div>
 <script>
 const BADGE_ICON={"First Sale":"🎟️","Hat-trick":"🎩","Group Closer":"👥","Campus Hero":"🏫","Comeback":"🚀","On Fire":"🔥"};
 const fmt=n=>n.toLocaleString("en-NG");
@@ -230,6 +256,7 @@ function render(d){DATA=d;
   countUp(document.getElementById("k-days"),days);
   document.getElementById("g-now").textContent=fmt(d.total_tickets);
   document.getElementById("g-goal").textContent=fmt(d.goal);
+  document.getElementById("g-label").textContent="Milestone "+d.milestone+(d.milestone_deadline?" · by "+new Date(d.milestone_deadline+"T12:00:00").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"}):"");
   setTimeout(()=>{document.getElementById("g-bar").style.width=Math.min(100,Math.max(1.5,d.total_tickets/d.goal*100))+"%";},200);
 
   const ranked=d.ambassadors.filter(a=>a.rank), warm=d.ambassadors.filter(a=>!a.rank);
@@ -237,7 +264,7 @@ function render(d){DATA=d;
   const pod=document.getElementById("podium");
   [[1,"p2"],[0,"p1"],[2,"p3"]].forEach(([i,cls])=>{
     const a=ranked[i], el=document.createElement("div");
-    el.className="spot "+cls+(a?"":" empty");
+    el.className="spot "+cls+(a?" tap":" empty");if(a)el.onclick=()=>openAmb(a,d);
     el.innerHTML=`<div class="who"><div class="avatar">${a?initials(a.name):"?"}${cls==="p1"&&a?'<span class="crown">👑</span>':""}</div>
       <b>${a?esc(a.name):"Open spot"}</b><span>${a?esc(a.school):"Make a sale"}</span>
       <span class="pts">${a?fmt(a.points)+" pts":"—"}</span></div><div class="block">${cls==="p1"?1:cls==="p2"?2:3}</div>`;
@@ -260,27 +287,51 @@ function render(d){DATA=d;
   ranked.forEach((a,i)=>{
     const mv=a.move==="new"?'<span class="mv new">NEW</span>':a.move>0?`<span class="mv up">▲${a.move}</span>`:a.move<0?`<span class="mv down">▼${-a.move}</span>`:'<span class="mv same">–</span>';
     const wkPct=Math.min(100,a.week_tickets/d.weekly_target*100);
-    const el=document.createElement("div");el.className="row";
+    const el=document.createElement("div");el.className="row tap";el.onclick=()=>openAmb(a,d);
     el.innerHTML=`<div class="rk">${a.rank}${mv}</div>
       <div class="nm"><b>${esc(a.name)}</b><div class="meta"><span>${esc(a.school)}</span><span class="lvl ${a.level}">${a.level}</span>${a.streak>=2?`<span>🔥 ${a.streak}-week streak</span>`:""}</div>
       ${a.badges.length?`<div class="badges">${a.badges.map(b=>`<span class="badge">${BADGE_ICON[b]||"⭐"} ${b}</span>`).join("")}</div>`:""}
       <div class="wk ${a.week_tickets<d.weekly_target?"under":""}"><div style="width:${wkPct}%"></div></div>
       <div class="meta" style="margin-top:4px">This week: ${a.week_tickets}/${d.weekly_target} tickets</div></div>
-      <div class="pt"><strong>${fmt(a.points)}</strong><small>pts · ${a.tickets} 🎟️</small></div>`;
+      <div class="pt"><strong>${fmt(a.points)}</strong><small>pts · ${a.tickets} 🎟️<span class="chev">›</span></small></div>`;
     list.appendChild(el);setTimeout(()=>el.classList.add("in"),400+i*70);
   });
   const chips=document.getElementById("chips");
   if(!warm.length) document.getElementById("warm").style.display="none";
-  warm.forEach(a=>{const c=document.createElement("span");c.className="chip";c.innerHTML=`${esc(a.name)} <span>· ${esc(a.school)}</span>`;chips.appendChild(c);});
+  warm.forEach(a=>{const c=document.createElement("span");c.className="chip tap";c.onclick=()=>openAmb(a,d);c.innerHTML=`${esc(a.name)} <span>· ${esc(a.school)}</span>`;chips.appendChild(c);});
 
   // campus
   const cup=document.getElementById("cup");
-  d.campus.forEach((c,i)=>{const el=document.createElement("div");el.className="camp"+(i===0&&c.avg_points>0?" lead":"");
+  d.campus.forEach((c,i)=>{const el=document.createElement("div");el.onclick=()=>openCamp(c,i);el.className="camp tap"+(i===0&&c.avg_points>0?" lead":"");
     el.innerHTML=`${i===0&&c.avg_points>0?'<span class="trophy">🏆</span>':""}<span class="no">#${i+1}</span><b>${esc(c.school)}</b>
       <div class="avg">${c.avg_points}</div><small>avg pts · ${c.tickets} tickets · ${c.ambassadors} ambassador${c.ambassadors>1?"s":""}</small>`;
     cup.appendChild(el);});
 }
 
+function openSheet(html){document.getElementById("sheetBody").innerHTML=html;
+  document.getElementById("sheet").classList.add("open");document.getElementById("sheetBg").classList.add("open");}
+function closeSheet(){document.getElementById("sheet").classList.remove("open");document.getElementById("sheetBg").classList.remove("open");}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet();});
+function openAmb(a,d){
+  const toNext=a.next_level_at?`${a.next_level_at-a.points} pts to ${a.next_level}`:"Top level reached";
+  const mx=Math.max(d.weekly_target,...a.history);
+  const weeks=a.history.map((t,i)=>`<div>${t}<i class="${t>=d.weekly_target?"hit":""}" style="height:${t/mx*70}px"></i>W${i+1}</div>`).join("");
+  openSheet(`<span class="lvl ${a.level}">${a.level}</span><h3 style="margin-top:10px">${esc(a.name)}</h3>
+   <div class="sm">${esc(a.school)} · ${a.rank?"Rank #"+a.rank:"Warming up"} · ${toNext}</div>
+   <div class="sgrid"><div><small>Tickets</small><b>${a.tickets}</b></div><div><small>Spark</small><b>${a.spark}</b></div><div><small>Rise</small><b>${a.rise}</b></div></div>
+   <div class="sh">This week</div><div class="sm">${a.week_tickets} of ${d.weekly_target} tickets${a.week_tickets>=d.weekly_target?" · Target hit ✅":` · ${d.weekly_target-a.week_tickets} to go`}</div>
+   <div class="wk ${a.week_tickets<d.weekly_target?"under":""}" style="max-width:none"><div style="width:${Math.min(100,a.week_tickets/d.weekly_target*100)}%"></div></div>
+   <div class="sh">Points</div><table class="brk"><tr><td>Ticket sales (${a.tickets} × 10)</td><td>${a.sale_points}</td></tr>
+   <tr><td>Group sale bonus</td><td>${a.group_bonus}</td></tr><tr><td>Activities</td><td>${a.activity_points}</td></tr><tr><td>Total</td><td>${fmt(a.points)}</td></tr></table>
+   <div class="sh">Tickets by week</div><div class="weeks">${weeks}</div>
+   ${a.badges.length?`<div class="sh">Badges</div><div class="badges">${a.badges.map(b=>`<span class="badge">${BADGE_ICON[b]||"⭐"} ${b}</span>`).join("")}</div>`:""}`);
+}
+function openCamp(c,i){
+  openSheet(`<span class="lvl">Campus Cup #${i+1}</span><h3 style="margin-top:10px">${esc(c.school)}</h3>
+   <div class="sm">${c.avg_points} avg pts · ${c.tickets} tickets · ${c.ambassadors} ambassador${c.ambassadors>1?"s":""}</div>
+   <div class="sh">Who's scoring</div>${c.members.map(m=>`<div class="mem"><b>${esc(m.name)}</b><span>${m.tickets} 🎟️ · <b style="color:var(--ink)">${fmt(m.points)}</b> pts</span></div>`).join("")}
+   <div class="sm" style="margin-top:10px">Campus score = total points ÷ number of ambassadors.</div>`);
+}
 function tick(){
   const now=lagosNow(), end=new Date(now);const dow=(now.getDay()+6)%7; // Mon=0
   end.setDate(now.getDate()+(6-dow));end.setHours(23,59,59,0);
@@ -301,6 +352,7 @@ function confetti(){
     if(++f<240)requestAnimationFrame(draw);else x.clearRect(0,0,c.width,c.height);})();
 }
 
+document.getElementById("sheetBg").onclick=closeSheet;document.getElementById("sheetX").onclick=closeSheet;
 fetch("data/leaderboard.json",{cache:"no-store"}).then(r=>r.json()).then(render)
   .catch(()=>{document.getElementById("updated").textContent="Couldn't load data";});
 </script>
