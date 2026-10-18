@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LSCE 3.0 Ambassador Leaderboard</title>
+<meta name="description" content="Who's leading the LSCE 3.0 Ambassador campaign. Updated daily.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#150208; --bg2:#22060f; --card:#2a0a14; --card2:#331019;
+  --red:#FF1F34; --red-deep:#C8102E; --cream:#EFEDDF; --ink:#F7F4EA;
+  --muted:#b9a9ac; --line:rgba(239,237,223,.12);
+  --gold:#F5C451; --silver:#D9D6CF; --bronze:#D08A57; --green:#49D49D;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Space Grotesk",system-ui,sans-serif;
+  min-height:100vh;overflow-x:hidden;
+  background-image:radial-gradient(1200px 600px at 50% -10%,rgba(255,31,52,.28),transparent 60%),
+    radial-gradient(800px 500px at 100% 40%,rgba(200,16,46,.12),transparent 60%);}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px}
+.mark{width:40px;height:40px;border-radius:10px;background:var(--red);display:grid;place-items:center;
+  font-weight:700;color:#fff;font-size:15px;letter-spacing:-.5px;box-shadow:0 6px 24px rgba(255,31,52,.45)}
+.brand b{display:block;font-size:15px;letter-spacing:.3px}
+.brand span{font-size:12px;color:var(--muted)}
+.updated{font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 10px;border-radius:999px}
+.updated i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);margin-right:6px;
+  box-shadow:0 0 0 0 rgba(73,212,157,.7);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(73,212,157,0)}100%{box-shadow:0 0 0 0 rgba(73,212,157,0)}}
+h1{font-size:clamp(34px,8vw,64px);line-height:.95;letter-spacing:-2px;margin:34px 0 8px;font-weight:700}
+h1 em{font-style:normal;color:var(--red)}
+.sub{color:var(--muted);font-size:15px;max-width:560px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:26px 0 8px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
+.kpi small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:1px}
+.kpi strong{font-size:26px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.goal{margin:18px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px}
+.goal-top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:10px}
+.goal-top b{color:var(--ink)}
+.bar{height:14px;border-radius:999px;background:rgba(239,237,223,.08);overflow:hidden}
+.bar>div{height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--red-deep),var(--red),#ff6a78);
+  transition:width 1.6s cubic-bezier(.2,.8,.2,1);box-shadow:0 0 16px rgba(255,31,52,.6)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:2px;color:var(--cream);margin:40px 0 14px;opacity:.85}
+/* podium */
+.stage{perspective:1100px;margin-top:8px}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:10px;transform:rotateX(14deg);
+  transform-style:preserve-3d}
+.spot{text-align:center;transform-style:preserve-3d}
+.who{padding:0 4px 12px;opacity:0;transform:translateY(16px);transition:all .6s ease .9s}
+.ready .who{opacity:1;transform:none}
+.avatar{width:62px;height:62px;border-radius:50%;margin:0 auto 8px;display:grid;place-items:center;
+  font-weight:700;font-size:22px;color:var(--bg);position:relative}
+.p1 .avatar{width:78px;height:78px;font-size:28px;background:var(--gold);box-shadow:0 0 0 4px rgba(245,196,81,.25),0 0 40px rgba(245,196,81,.5)}
+.p2 .avatar{background:var(--silver)} .p3 .avatar{background:var(--bronze)}
+.crown{position:absolute;top:-24px;left:50%;transform:translateX(-50%);font-size:24px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translate(-50%,-4px)}}
+.who b{display:block;font-size:15px}
+.who span{font-size:12px;color:var(--muted)}
+.who .pts{display:block;font-size:20px;font-weight:700;color:var(--ink);margin-top:2px}
+.block{border-radius:14px 14px 4px 4px;position:relative;height:0;transition:height 1.1s cubic-bezier(.2,.9,.25,1.15);
+  display:flex;align-items:flex-start;justify-content:center;padding-top:12px;font-weight:700;font-size:38px;
+  color:rgba(21,2,8,.55);overflow:hidden}
+.block::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.35),transparent 40%)}
+.block::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:rgba(255,255,255,.35);
+  transform:translateY(-100%) rotateX(70deg);transform-origin:bottom}
+.p1 .block{background:linear-gradient(180deg,#ffd978,#c89527)} .p2 .block{background:linear-gradient(180deg,#f1eee7,#9d9a92)}
+.p3 .block{background:linear-gradient(180deg,#eaa774,#9c5a2e)}
+.ready .p1 .block{height:170px} .ready .p2 .block{height:120px;transition-delay:.15s} .ready .p3 .block{height:90px;transition-delay:.3s}
+.empty .avatar{background:transparent!important;border:2px dashed rgba(239,237,223,.3);box-shadow:none!important;color:var(--muted)}
+.shadow{height:24px;margin-top:-4px;background:radial-gradient(ellipse at center,rgba(0,0,0,.6),transparent 70%)}
+/* champion */
+.champ{position:relative;overflow:hidden;margin-top:26px;border-radius:20px;padding:20px;
+  background:linear-gradient(135deg,var(--red),var(--red-deep));box-shadow:0 18px 50px rgba(255,31,52,.3);
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.champ small{text-transform:uppercase;letter-spacing:2px;font-size:11px;opacity:.85}
+.champ h3{font-size:26px;letter-spacing:-.5px;margin-top:4px}
+.champ p{font-size:13px;opacity:.9}
+.count{display:flex;gap:6px}
+.count div{background:rgba(21,2,8,.35);border-radius:10px;padding:8px 10px;text-align:center;min-width:52px}
+.count b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.count span{font-size:10px;text-transform:uppercase;letter-spacing:1px;opacity:.8}
+canvas#confetti{position:absolute;inset:0;pointer-events:none}
+/* table */
+.list{display:flex;flex-direction:column;gap:8px}
+.row{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;background:var(--card);
+  border:1px solid var(--line);border-radius:16px;padding:12px 14px;opacity:0;transform:translateY(12px) rotateX(-8deg);
+  transition:transform .5s ease,opacity .5s ease,border-color .2s}
+.row.in{opacity:1;transform:none}
+.row:hover{border-color:rgba(255,31,52,.5)}
+.rk{font-size:22px;font-weight:700;text-align:center;font-variant-numeric:tabular-nums}
+.mv{display:block;font-size:11px;font-weight:600;margin-top:2px}
+.up{color:var(--green)} .down{color:var(--red)} .same{color:var(--muted)} .new{color:var(--gold)}
+.nm b{font-size:16px}
+.nm .meta{font-size:12px;color:var(--muted);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.lvl{font-size:10px;text-transform:uppercase;letter-spacing:1px;padding:3px 8px;border-radius:999px;border:1px solid var(--line);color:var(--cream)}
+.lvl.Legend{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.lvl.Emerger{background:var(--red);color:#fff;border-color:var(--red)}
+.lvl.Spark{border-color:var(--red);color:#ff8a95}
+.badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.badge{font-size:11px;background:var(--card2);border-radius:999px;padding:3px 8px;color:var(--cream)}
+.wk{margin-top:8px;height:6px;border-radius:999px;background:rgba(239,237,223,.08);overflow:hidden;max-width:260px}
+.wk>div{height:100%;background:var(--green);border-radius:999px}
+.wk.under>div{background:var(--cream)}
+.pt{text-align:right}
+.pt strong{font-size:22px;font-variant-numeric:tabular-nums}
+.pt small{display:block;font-size:11px;color:var(--muted)}
+.warm{margin-top:14px;background:transparent;border:1px dashed var(--line);border-radius:16px;padding:14px}
+.warm p{font-size:13px;color:var(--muted);margin-bottom:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:6px 10px;border-radius:999px;background:var(--card);border:1px solid var(--line)}
+.chip span{color:var(--muted)}
+/* campus */
+.cup{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.camp{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;position:relative;overflow:hidden}
+.camp.lead{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.camp .no{font-size:12px;color:var(--muted)}
+.camp b{display:block;font-size:18px;margin:4px 0}
+.camp .avg{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.camp small{display:block;font-size:11px;color:var(--muted)}
+.camp .trophy{position:absolute;right:10px;top:10px;font-size:20px}
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;font-size:13px;color:var(--muted)}
+.rule b{display:block;color:var(--ink);font-size:14px;margin-bottom:6px}
+.rule table{width:100%;border-collapse:collapse}
+.rule td{padding:3px 0}.rule td:last-child{text-align:right;color:var(--ink);font-weight:600}
+footer{margin-top:44px;text-align:center;color:var(--muted);font-size:12px;line-height:1.7}
+footer b{color:var(--cream)}
+@media (max-width:640px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .ready .p1 .block{height:130px}.ready .p2 .block{height:92px}.ready .p3 .block{height:70px}
+  .block{font-size:28px}.avatar{width:50px;height:50px;font-size:18px}.p1 .avatar{width:62px;height:62px;font-size:22px}
+  .who b{font-size:13px}.who .pts{font-size:16px}
+  .row{grid-template-columns:36px 1fr auto;padding:12px}
+  .rk{font-size:18px}.pt strong{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><div class="mark">3.0</div><div><b>LSCE AMBASSADORS</b><span>Emerge: Beyond the Crowd</span></div></div>
+    <div class="updated"><i></i><span id="updated">Loading…</span></div>
+  </header>
+
+  <h1>The race to<br><em>fill the room.</em></h1>
+  <p class="sub" id="sub">Every ticket counts. Every campus counts. Here's who's leading the LSCE 3.0 Ambassador campaign.</p>
+
+  <div class="kpis">
+    <div class="kpi"><small>Tickets sold</small><strong id="k-total">0</strong></div>
+    <div class="kpi"><small>Active sellers</small><strong id="k-active">0</strong></div>
+    <div class="kpi"><small>Week</small><strong id="k-week">1</strong></div>
+    <div class="kpi"><small>Days left</small><strong id="k-days">0</strong></div>
+  </div>
+
+  <div class="goal">
+    <div class="goal-top"><span>Campaign goal</span><span><b id="g-now">0</b> / <span id="g-goal">1,000</span> tickets</span></div>
+    <div class="bar"><div id="g-bar"></div></div>
+  </div>
+
+  <h2>The Podium</h2>
+  <div class="stage"><div class="podium" id="podium"></div></div>
+  <div class="shadow"></div>
+
+  <div class="champ" id="champ">
+    <canvas id="confetti"></canvas>
+    <div><small>Weekly Champion · Week <span id="c-week">1</span></small>
+      <h3 id="c-name">Up for grabs</h3><p id="c-detail">Top seller this week wins ₦5,000.</p></div>
+    <div class="count" id="countdown"></div>
+  </div>
+
+  <h2>Leaderboard</h2>
+  <div class="list" id="list"></div>
+  <div class="warm" id="warm"><p>🔥 Warming up: your first points put you on the board.</p><div class="chips" id="chips"></div></div>
+
+  <h2>Campus Cup</h2>
+  <div class="cup" id="cup"></div>
+  <p style="font-size:12px;color:var(--muted);margin-top:8px">Ranked by average points per ambassador, so every campus competes fairly.</p>
+
+  <h2>How to climb</h2>
+  <div class="rules">
+    <div class="rule"><b>Points</b><table>
+      <tr><td>Each ticket sold</td><td>10</td></tr>
+      <tr><td>Group sale (5+ at once)</td><td>+15</td></tr>
+      <tr><td>Status / story post</td><td>1</td></tr>
+      <tr><td>Class or hostel announcement</td><td>3</td></tr>
+      <tr><td>Original content</td><td>5</td></tr>
+      <tr><td>Info session / campus table</td><td>8</td></tr>
+      <tr><td>Above and beyond</td><td>5–20</td></tr></table>
+      <p style="margin-top:8px">Activity points are capped at 30 per week. Sales always come first.</p></div>
+    <div class="rule"><b>Levels</b><table>
+      <tr><td>Rookie</td><td>0</td></tr><tr><td>Rising</td><td>30</td></tr><tr><td>Spark</td><td>100</td></tr>
+      <tr><td>Emerger</td><td>250</td></tr><tr><td>Legend</td><td>500</td></tr></table></div>
+    <div class="rule"><b>Badges</b>
+      🎟️ First Sale: your first ticket<br>🎩 Hat-trick: 3 tickets in one day<br>👥 Group Closer: 5+ tickets in one sale<br>
+      🏫 Campus Hero: top seller on your campus<br>🚀 Comeback: biggest climb this update<br>🔥 On Fire: target hit 2+ weeks running</div>
+    <div class="rule"><b>Rewards</b>
+      💰 Commission on every ticket you sell<br>🏆 ₦5,000 for each Weekly Champion<br>🎁 Campaign Champion: free pass for a friend + recognition on the day<br>📜 Certificate for ambassadors who hit their targets</div>
+  </div>
+
+  <footer>Weekly target: <b>5 tickets</b> · Weeks run Monday to Sunday · Campaign ends Sunday, 22 November<br>
+    Only verified, paid tickets count. Questions? Ask in the ambassador WhatsApp group.<br>© 2026 Lagos Students Career Expo</footer>
+</div>
+
+<script>
+const BADGE_ICON={"First Sale":"🎟️","Hat-trick":"🎩","Group Closer":"👥","Campus Hero":"🏫","Comeback":"🚀","On Fire":"🔥"};
+const fmt=n=>n.toLocaleString("en-NG");
+const initials=n=>n.split(" ").map(p=>p[0]).join("").slice(0,2).toUpperCase();
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function lagosNow(){const d=new Date();return new Date(d.getTime()+d.getTimezoneOffset()*60000+3600000);}
+function countUp(el,to){const t0=performance.now(),dur=1200;
+  (function f(t){const p=Math.min(1,(t-t0)/dur);el.textContent=fmt(Math.round(to*(1-Math.pow(1-p,3))));if(p<1)requestAnimationFrame(f);})(t0);}
+
+let DATA=null;
+function render(d){DATA=d;
+  const upd=new Date(d.updated);
+  document.getElementById("updated").textContent="Updated "+upd.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit",timeZone:"Africa/Lagos"});
+  const now=lagosNow(), end=new Date(d.campaign_end+"T23:59:59");
+  const days=Math.max(0,Math.ceil((end-now)/864e5));
+  countUp(document.getElementById("k-total"),d.total_tickets);
+  countUp(document.getElementById("k-active"),d.active_sellers);
+  document.getElementById("k-week").textContent=d.current_week;
+  countUp(document.getElementById("k-days"),days);
+  document.getElementById("g-now").textContent=fmt(d.total_tickets);
+  document.getElementById("g-goal").textContent=fmt(d.goal);
+  setTimeout(()=>{document.getElementById("g-bar").style.width=Math.min(100,Math.max(1.5,d.total_tickets/d.goal*100))+"%";},200);
+
+  const ranked=d.ambassadors.filter(a=>a.rank), warm=d.ambassadors.filter(a=>!a.rank);
+  // podium order: 2,1,3
+  const pod=document.getElementById("podium");
+  [[1,"p2"],[0,"p1"],[2,"p3"]].forEach(([i,cls])=>{
+    const a=ranked[i], el=document.createElement("div");
+    el.className="spot "+cls+(a?"":" empty");
+    el.innerHTML=`<div class="who"><div class="avatar">${a?initials(a.name):"?"}${cls==="p1"&&a?'<span class="crown">👑</span>':""}</div>
+      <b>${a?esc(a.name):"Open spot"}</b><span>${a?esc(a.school):"Make a sale"}</span>
+      <span class="pts">${a?fmt(a.points)+" pts":"—"}</span></div><div class="block">${cls==="p1"?1:cls==="p2"?2:3}</div>`;
+    pod.appendChild(el);
+  });
+  requestAnimationFrame(()=>setTimeout(()=>document.querySelector(".stage").classList.add("ready"),100));
+
+  // champion
+  document.getElementById("c-week").textContent=d.current_week;
+  if(d.weekly_champion){
+    document.getElementById("c-name").textContent=d.weekly_champion.name+" · "+d.weekly_champion.school;
+    document.getElementById("c-detail").textContent=d.weekly_champion.tickets+" tickets this week. Leading for ₦5,000.";
+    confetti();
+  }
+  tick();setInterval(tick,1000);
+
+  // list
+  const list=document.getElementById("list");
+  if(!ranked.length) list.innerHTML='<div class="row in" style="grid-template-columns:1fr"><div class="nm"><b>The board is empty.</b><div class="meta">The first ambassador to make a sale takes the #1 spot.</div></div></div>';
+  ranked.forEach((a,i)=>{
+    const mv=a.move==="new"?'<span class="mv new">NEW</span>':a.move>0?`<span class="mv up">▲${a.move}</span>`:a.move<0?`<span class="mv down">▼${-a.move}</span>`:'<span class="mv same">–</span>';
+    const wkPct=Math.min(100,a.week_tickets/d.weekly_target*100);
+    const el=document.createElement("div");el.className="row";
+    el.innerHTML=`<div class="rk">${a.rank}${mv}</div>
+      <div class="nm"><b>${esc(a.name)}</b><div class="meta"><span>${esc(a.school)}</span><span class="lvl ${a.level}">${a.level}</span>${a.streak>=2?`<span>🔥 ${a.streak}-week streak</span>`:""}</div>
+      ${a.badges.length?`<div class="badges">${a.badges.map(b=>`<span class="badge">${BADGE_ICON[b]||"⭐"} ${b}</span>`).join("")}</div>`:""}
+      <div class="wk ${a.week_tickets<d.weekly_target?"under":""}"><div style="width:${wkPct}%"></div></div>
+      <div class="meta" style="margin-top:4px">This week: ${a.week_tickets}/${d.weekly_target} tickets</div></div>
+      <div class="pt"><strong>${fmt(a.points)}</strong><small>pts · ${a.tickets} 🎟️</small></div>`;
+    list.appendChild(el);setTimeout(()=>el.classList.add("in"),400+i*70);
+  });
+  const chips=document.getElementById("chips");
+  if(!warm.length) document.getElementById("warm").style.display="none";
+  warm.forEach(a=>{const c=document.createElement("span");c.className="chip";c.innerHTML=`${esc(a.name)} <span>· ${esc(a.school)}</span>`;chips.appendChild(c);});
+
+  // campus
+  const cup=document.getElementById("cup");
+  d.campus.forEach((c,i)=>{const el=document.createElement("div");el.className="camp"+(i===0&&c.avg_points>0?" lead":"");
+    el.innerHTML=`${i===0&&c.avg_points>0?'<span class="trophy">🏆</span>':""}<span class="no">#${i+1}</span><b>${esc(c.school)}</b>
+      <div class="avg">${c.avg_points}</div><small>avg pts · ${c.tickets} tickets · ${c.ambassadors} ambassador${c.ambassadors>1?"s":""}</small>`;
+    cup.appendChild(el);});
+}
+
+function tick(){
+  const now=lagosNow(), end=new Date(now);const dow=(now.getDay()+6)%7; // Mon=0
+  end.setDate(now.getDate()+(6-dow));end.setHours(23,59,59,0);
+  if(DATA){const w1=new Date(DATA.campaign_start+"T23:59:59");w1.setDate(w1.getDate()+6);if(end<w1)end.setTime(w1.getTime());}
+  let s=Math.max(0,Math.floor((end-now)/1000));
+  const u=[["days",86400],["hrs",3600],["min",60],["sec",1]].map(([l,v])=>{const n=Math.floor(s/v);s-=n*v;return `<div><b>${String(n).padStart(2,"0")}</b><span>${l}</span></div>`;});
+  document.getElementById("countdown").innerHTML=u.join("");
+}
+
+function confetti(){
+  const c=document.getElementById("confetti"),box=c.parentElement,x=c.getContext("2d");
+  c.width=box.offsetWidth;c.height=box.offsetHeight;
+  const cols=["#F5C451","#EFEDDF","#ffffff","#150208"];
+  const ps=Array.from({length:90},()=>({x:Math.random()*c.width,y:-Math.random()*c.height,r:3+Math.random()*4,
+    vy:1+Math.random()*2.2,vx:-.6+Math.random()*1.2,a:Math.random()*6,c:cols[Math.floor(Math.random()*cols.length)]}));
+  let f=0;(function draw(){x.clearRect(0,0,c.width,c.height);ps.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.a+=.1;
+    x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/2,p.r,p.r*1.6);x.restore();});
+    if(++f<240)requestAnimationFrame(draw);else x.clearRect(0,0,c.width,c.height);})();
+}
+
+fetch("data/leaderboard.json",{cache:"no-store"}).then(r=>r.json()).then(render)
+  .catch(()=>{document.getElementById("updated").textContent="Couldn't load data";});
+</script>
+</body>
+</html>
