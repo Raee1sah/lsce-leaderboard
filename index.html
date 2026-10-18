@@ -180,7 +180,7 @@ footer b{color:var(--cream)}
     <div class="kpi"><small>Tickets sold</small><strong id="k-total">0</strong></div>
     <div class="kpi"><small>Active sellers</small><strong id="k-active">0</strong></div>
     <div class="kpi"><small>Week</small><strong id="k-week">1</strong></div>
-    <div class="kpi"><small>Days left</small><strong id="k-days">0</strong></div>
+    <div class="kpi"><small id="k-days-l">Days left</small><strong id="k-days">0</strong></div>
   </div>
 
   <div class="goal">
@@ -248,7 +248,8 @@ let DATA=null;
 function render(d){DATA=d;
   const upd=new Date(d.updated);
   document.getElementById("updated").textContent="Updated "+upd.toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit",timeZone:"Africa/Lagos"});
-  const now=lagosNow(), end=new Date(d.campaign_end+"T23:59:59");
+  const now=lagosNow(), end=new Date((d.milestone_deadline||d.campaign_end)+"T23:59:59");
+  document.getElementById("k-days-l").textContent=d.milestone_deadline?"Days to Milestone "+d.milestone:"Days left";
   const days=Math.max(0,Math.ceil((end-now)/864e5));
   countUp(document.getElementById("k-total"),d.total_tickets);
   countUp(document.getElementById("k-active"),d.active_sellers);
