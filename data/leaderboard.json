@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-18T08:06:40+01:00",
+ "updated": "2026-10-22T19:50:51+01:00",
  "goal": 500,
  "milestone": 1,
  "milestone_deadline": "2026-11-01",
@@ -56,8 +56,52 @@
    "move": null
   },
   {
+   "name": "Darasimi D.",
+   "school": "UNIOSUN",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
    "name": "Dorcas O.",
    "school": "Anchor",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
+   "name": "Emmanuel O.",
+   "school": "LASU Epe",
    "spark": 0,
    "rise": 0,
    "tickets": 0,
@@ -144,8 +188,74 @@
    "move": null
   },
   {
+   "name": "Hikmah F.",
+   "school": "Trinity",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
    "name": "Isa S.",
    "school": "LASU",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
+   "name": "Itunuoluwa",
+   "school": "LASU",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
+   "name": "Jemima D.",
+   "school": "Caleb",
    "spark": 0,
    "rise": 0,
    "tickets": 0,
@@ -320,6 +430,28 @@
    "move": null
   },
   {
+   "name": "Taofeeqat S.",
+   "school": "LASU",
+   "spark": 0,
+   "rise": 0,
+   "tickets": 0,
+   "week_tickets": 0,
+   "points": 0,
+   "activity_points": 0,
+   "level": "Rookie",
+   "next_level_at": 30,
+   "next_level": "Rising",
+   "streak": 0,
+   "badges": [],
+   "sale_points": 0,
+   "group_bonus": 0,
+   "history": [
+    0
+   ],
+   "rank": null,
+   "move": null
+  },
+  {
    "name": "Usman L.",
    "school": "LASU Epe",
    "spark": 0,
@@ -407,7 +539,7 @@
   },
   {
    "school": "Caleb",
-   "ambassadors": 4,
+   "ambassadors": 5,
    "tickets": 0,
    "avg_points": 0.0,
    "members": [
@@ -427,6 +559,11 @@
      "tickets": 0
     },
     {
+     "name": "Jemima D.",
+     "points": 0,
+     "tickets": 0
+    },
+    {
      "name": "Sogo A.",
      "points": 0,
      "tickets": 0
@@ -435,12 +572,17 @@
   },
   {
    "school": "LASU",
-   "ambassadors": 3,
+   "ambassadors": 5,
    "tickets": 0,
    "avg_points": 0.0,
    "members": [
     {
      "name": "Isa S.",
+     "points": 0,
+     "tickets": 0
+    },
+    {
+     "name": "Itunuoluwa",
      "points": 0,
      "tickets": 0
     },
@@ -453,15 +595,25 @@
      "name": "Raheemah A.",
      "points": 0,
      "tickets": 0
+    },
+    {
+     "name": "Taofeeqat S.",
+     "points": 0,
+     "tickets": 0
     }
    ]
   },
   {
    "school": "LASU Epe",
-   "ambassadors": 2,
+   "ambassadors": 3,
    "tickets": 0,
    "avg_points": 0.0,
    "members": [
+    {
+     "name": "Emmanuel O.",
+     "points": 0,
+     "tickets": 0
+    },
     {
      "name": "Emmanuella E.",
      "points": 0,
@@ -487,6 +639,19 @@
     },
     {
      "name": "Yusuf A.",
+     "points": 0,
+     "tickets": 0
+    }
+   ]
+  },
+  {
+   "school": "Trinity",
+   "ambassadors": 1,
+   "tickets": 0,
+   "avg_points": 0.0,
+   "members": [
+    {
+     "name": "Hikmah F.",
      "points": 0,
      "tickets": 0
     }
@@ -523,6 +688,19 @@
     },
     {
      "name": "Zainab A.",
+     "points": 0,
+     "tickets": 0
+    }
+   ]
+  },
+  {
+   "school": "UNIOSUN",
+   "ambassadors": 1,
+   "tickets": 0,
+   "avg_points": 0.0,
+   "members": [
+    {
+     "name": "Darasimi D.",
      "points": 0,
      "tickets": 0
     }
